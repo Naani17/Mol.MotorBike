@@ -2,6 +2,6 @@
 {
     public interface IProducer : IEntity
     {
-        string ShortCutName { get; set; }
+        string Country { get; set; }
     }
 }

@@ -1,31 +1,28 @@
 ﻿using Interfaces;
-using System;
+using Interfaces.Models;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DAOMock1
 {
     public class DB : IDAO
     {
         private List<IProducer> _producers;
-        private List<ICar> _cars;
+        private List<IMotorbike> _motorbikes;
 
         public DB()
         {
             _producers = new List<IProducer>()
             {
-                new BO.Producent{ ID=1, Name="Opel", Founded=1940 },
-                new BO.Producent{ ID=2, Name="Fiat", Founded=1950 },
-                new BO.Producent{ ID=3, Name="Volvo", Founded=1930}
+                new BO.Producent{ ID=1, Name="Opel", Country="USA" },
+                new BO.Producent{ ID=2, Name="Fiat", Country="France" },
+                new BO.Producent{ ID=3, Name="Volvo", Country="Germany" }
             };
 
-            _cars = new List<ICar>()
+            _motorbikes = new List<IMotorbike>()
             {
                 new BO.Motorbike
                 {
-                    ID =1,
+                    Id =1,
                     Name ="Corsa",
                     Producer = _producers[0],
                     ProductionYear =1999,
@@ -33,7 +30,7 @@ namespace DAOMock1
                 },
                 new BO.Motorbike
                 {
-                    ID =2,
+                    Id =2,
                     Name ="Astra",
                     Producer = _producers[0],
                     ProductionYear =2009,
@@ -41,7 +38,7 @@ namespace DAOMock1
                 },
                 new BO.Motorbike
                 {
-                    ID =3,
+                    Id =3,
                     Name ="Panda",
                     Producer = _producers[1],
                     ProductionYear =2000,
@@ -49,7 +46,7 @@ namespace DAOMock1
                 },
                 new BO.Motorbike
                 {
-                    ID =4,
+                    Id =4,
                     Name ="Multipla",
                     Producer = _producers[0],
                     ProductionYear = 2007,
@@ -57,25 +54,23 @@ namespace DAOMock1
                 },
                 new BO.Motorbike
                 {
-                    ID =5,
+                    Id =5,
                     Name ="S40",
                     Producer = _producers[2],
                     ProductionYear =2002,
                     Transmission =Core.TransmissionType.Automatic
                 }
-
-
             };
         }
 
-        public ICar CreateEmptyCar()
+        public IMotorbike CreateEmptyMotorBike()
         {
             return new BO.Motorbike();
         }
 
-        public IEnumerable<ICar> GetAllCars()
+        public IEnumerable<IMotorbike> GetAllCars()
         {
-            return _cars;
+            return _motorbikes;
         }
 
         public IEnumerable<IProducer> GetAllProducers()

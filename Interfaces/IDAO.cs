@@ -11,7 +11,7 @@ namespace Interfaces
     {
         IEnumerable<IProducer> GetAllProducers();
         IEnumerable<IMotorbike> GetAllCars();
-        IMotorbike CreateEmptyCar();
+        IMotorbike CreateEmptyMotorBike();
 
     }
 }

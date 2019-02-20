@@ -1,24 +1,22 @@
 ﻿using Interfaces;
+using Interfaces.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BLC
 {
-    public class BLC
+    public class BLC : IBLC
     {
         private IDAO dao;
 
-        public BLC( string dbName)
+        public BLC(string dbName)
         {
             Assembly a = Assembly.UnsafeLoadFrom(dbName);
 
             Type daoToCreate = null;
             Type daoType = typeof(IDAO);
-            
+
             foreach (var t in a.GetTypes())
             {
                 foreach (var i in t.GetInterfaces())
@@ -32,7 +30,7 @@ namespace BLC
             dao = (IDAO)Activator.CreateInstance(daoToCreate, new object[] { });
         }
 
-        public IEnumerable<ICar> GetCars()
+        public IEnumerable<IMotorbike> GetMotorbike()
         {
             return dao.GetAllCars();
         }
@@ -42,9 +40,9 @@ namespace BLC
             return dao.GetAllProducers();
         }
 
-        public ICar CreateEmptyCar()
+        public IMotorbike CreateEmptyMotorBike()
         {
-            return dao.CreateEmptyCar();
+            return dao.CreateEmptyMotorBike();
         }
     }
 }

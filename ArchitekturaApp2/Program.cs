@@ -11,6 +11,7 @@ namespace ArchitekturaApp2
         static void Main(string[] args)
         {
             Properties.Settings sett = new Properties.Settings();
+            var tmp = sett.dbNameConf;
             BLC.BLC blc = new BLC.BLC( sett.dbNameConf);
 
             foreach (var prod in blc.GetProducers())
@@ -19,7 +20,7 @@ namespace ArchitekturaApp2
             }
 
             Console.WriteLine("####################");
-            foreach (var car in blc.GetCars())
+            foreach (var car in blc.GetMotorbike())
             {
                 Console.WriteLine(car);
             }
