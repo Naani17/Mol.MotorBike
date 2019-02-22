@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="TransmissionType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WindowType.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

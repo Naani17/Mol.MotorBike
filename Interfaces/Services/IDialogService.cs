@@ -1,9 +1,12 @@
-﻿namespace Interfaces.Services
+﻿using Core;
+using Interfaces.Models;
+
+namespace Interfaces.Services
 {
     public interface IDialogService
     {
-        void ShowError();
-        void OpenWindow();
-        void CloseWindow();
+        void ShowError(string message);
+        void OpenWindow(IEntity entity, WindowType windowsType, IBLC blc, IDialogService dialogService);
+        void CloseWindow(string quid);
     }
 }

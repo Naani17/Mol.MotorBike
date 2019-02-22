@@ -10,16 +10,22 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="0.5*"></RowDefinition>
             <RowDefinition Height="3*"></RowDefinition>
+            <RowDefinition Height="0.5*"></RowDefinition>
         </Grid.RowDefinitions>
+
         <StackPanel Grid.Row="0" Orientation="Horizontal">
             <Label Content="Producent: " VerticalAlignment="Center" Margin="5 0"/>
-            <ComboBox VerticalAlignment="Center" MinWidth="200" MinHeight="30" Margin="5" />
-            <Button VerticalAlignment="Center" Content="Dodaj" MinHeight="40" MinWidth="70"  Margin="5"></Button>
-            <Button VerticalAlignment="Center" Content="Usuń" MinHeight="40" MinWidth="70"  Margin="5"></Button>
-            <Button VerticalAlignment="Center" Content="Edytuj" MinHeight="40" MinWidth="70"  Margin="5"></Button>
+            <ComboBox VerticalAlignment="Center" MinWidth="200" MinHeight="30" Margin="5"
+                      Text="Wybierz producenta" ItemsSource="{Binding Producers}" SelectedItem="{Binding SelectedProducer}"
+                      DisplayMemberPath="Name" SelectedValuePath="Name"
+                      
+                      />
+            <Button VerticalAlignment="Center" Content="Dodaj" MinHeight="40" MinWidth="70"  Margin="5" Command="{Binding AddProducerCommand}"></Button>
+            <Button VerticalAlignment="Center" Content="Usuń" MinHeight="40" MinWidth="70"  Margin="5" Command="{Binding DeleteProducerCommand}"></Button>
+            <Button VerticalAlignment="Center" Content="Edytuj" MinHeight="40" MinWidth="70"  Margin="5" Command="{Binding UpdateProducerCommand}"></Button>
         </StackPanel>
+
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
@@ -28,22 +34,45 @@
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Row="1">
                 <Label Content="Typ skrzyni biegów: " HorizontalAlignment="Center" Margin="5 0"/>
-                <ComboBox HorizontalAlignment="Center" MinWidth="200" MaxWidth="300" Margin="10 0" />
+                <ComboBox ItemsSource="{Binding TransmissionTypes}" SelectedItem="{Binding SelectedTransmission}"
+                          HorizontalAlignment="Center" MinWidth="200" MaxWidth="300" Margin="10 0"
+                ></ComboBox>
             </StackPanel>
             <StackPanel Grid.Row="1" Grid.Column="1">
                 <Label Content="Nazwa" HorizontalAlignment="Center" Margin="5 0"/>
-                <TextBox MinWidth="250" MaxWidth="450" HorizontalAlignment="Center" Margin="5 0"/>
+                <TextBox MinWidth="250" MaxWidth="450" HorizontalAlignment="Center" Margin="5 0" Text="{Binding NameMotorBike,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
         </Grid>
-        <DataGrid Grid.Row="3" CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True" AutoGenerateColumns="False"
-                              HorizontalAlignment="Stretch" HeadersVisibility="Column"
-                              HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" ItemsSource="{Binding Motorbikes}" 
+
+        <DataGrid Grid.Row="2" CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True" AutoGenerateColumns="False"
+                  HorizontalAlignment="Stretch" HeadersVisibility="Column"
+                  HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" ItemsSource="{Binding Motorbikes}" 
+                  SelectedItem="{Binding SelectedMotorbike}"  SelectionUnit="FullRow"
                   >
+            <DataGrid.InputBindings>
+                <MouseBinding Gesture="LeftDoubleClick" Command="{Binding UpdateMotorbikeCommand}"></MouseBinding>
+            </DataGrid.InputBindings>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Nazwa" Binding="{Binding Name}" MinWidth="200" Width="auto"></DataGridTextColumn>
-                <DataGridTextColumn Header="Rok produkcji" Binding="{Binding ProductionYear}" MinWidth="200" Width="*"></DataGridTextColumn>
+                <DataGridTextColumn Header="Rok produkcji" Binding="{Binding ProductionYear}" MinWidth="100" Width="*"></DataGridTextColumn>
+                <DataGridTextColumn Header="Typ skrzyni" Binding="{Binding Transmission}" MinWidth="200" Width="*"></DataGridTextColumn>
+                <DataGridTextColumn Header="Producent" Binding="{Binding Producer.Name}" MinWidth="200" Width="*"></DataGridTextColumn>
+
             </DataGrid.Columns>
 
         </DataGrid>
+
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Row="1">
+                <Button VerticalAlignment="Center" Content="Dodaj" MinHeight="20" MinWidth="70"  Margin="10" Command="{Binding AddMotorbikeCommand}"></Button>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Grid.Column="1">
+                <Button VerticalAlignment="Center" Content="Usuń" MinHeight="20" MinWidth="70"  Margin="10" Command="{Binding DeleteMotorbikeCommand}"></Button>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>

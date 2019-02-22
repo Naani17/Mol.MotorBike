@@ -1,21 +1,26 @@
 ﻿using Interfaces;
 using Interfaces.Models;
 using System.Collections.Generic;
+using DAOMock1.BO;
+using DAOMock1.Services;
+using Interfaces.Services;
 
 namespace DAOMock1
 {
     public class DB : IDAO
     {
-        private List<IProducer> _producers;
-        private List<IMotorbike> _motorbikes;
+        private readonly List<IProducer> _producers;
+        private readonly List<IMotorbike> _motorbikes;
+        private readonly IProducerService _producerService;
+        private IMotorbikeService _motorbikeService;
 
         public DB()
         {
             _producers = new List<IProducer>()
             {
-                new BO.Producent{ ID=1, Name="Opel", Country="USA" },
-                new BO.Producent{ ID=2, Name="Fiat", Country="France" },
-                new BO.Producent{ ID=3, Name="Volvo", Country="Germany" }
+                new BO.Producent{ Id=1, Name="Opel", Country="USA" },
+                new BO.Producent{ Id=2, Name="Fiat", Country="France" },
+                new BO.Producent{ Id=3, Name="Volvo", Country="Germany" }
             };
 
             _motorbikes = new List<IMotorbike>()
@@ -61,21 +66,23 @@ namespace DAOMock1
                     Transmission =Core.TransmissionType.Automatic
                 }
             };
+
+            _producerService = new ProducerService(_producers);
+            _motorbikeService = new MotorbikeService(_motorbikes);
+
+
         }
 
-        public IMotorbike CreateEmptyMotorBike()
-        {
-            return new BO.Motorbike();
-        }
+        public IMotorbike CreateEmptyMotorBike() => new Motorbike();
 
-        public IEnumerable<IMotorbike> GetAllCars()
-        {
-            return _motorbikes;
-        }
+        public IProducer CreateEmptyProducer() => new Producent();
 
-        public IEnumerable<IProducer> GetAllProducers()
-        {
-            return _producers;
-        }
+        public IEnumerable<IMotorbike> GetAllMotorbike() => _motorbikes;
+
+        public IEnumerable<IProducer> GetAllProducers() => _producers;
+
+        public IProducerService ProducerService() => _producerService;
+
+        public IMotorbikeService MotorbikeService() => _motorbikeService;
     }
 }

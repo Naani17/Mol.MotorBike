@@ -37,6 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -56,8 +57,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Bindable\BindableBase.cs" />
+    <Compile Include="Bindable\RelayCommand.cs" />
+    <Compile Include="Bindable\ValidateBase.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Services\DialogService.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="Views\MotorbikeView.xaml.cs">
+      <DependentUpon>MotorbikeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProducerView.xaml.cs">
+      <DependentUpon>ProducerView.xaml</DependentUpon>
+    </Compile>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -66,10 +77,20 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ViewModels\MotorbikeViewModel.cs" />
+    <Compile Include="ViewModels\ProducerViewModel.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\MotorbikeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ProducerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -97,11 +118,17 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Exceptions\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BLC\BLC.csproj">
       <Project>{491894F9-0B66-4C2F-ACC4-69BA0BF282F3}</Project>
       <Name>BLC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{bd110e32-8b08-4875-bfac-645aa9feca09}</Project>
+      <Name>Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Interfaces\Interfaces.csproj">
       <Project>{79da87ba-7a4f-4642-8a87-4b5fbe1a9bc7}</Project>

@@ -1,4 +1,5 @@
 ﻿using Interfaces.Models;
+using Interfaces.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,18 @@ namespace Interfaces
 {
     public interface IDAO
     {
-        IEnumerable<IProducer> GetAllProducers();
-        IEnumerable<IMotorbike> GetAllCars();
         IMotorbike CreateEmptyMotorBike();
+
+        IProducer CreateEmptyProducer();
+
+        IEnumerable<IMotorbike> GetAllMotorbike();
+
+        IEnumerable<IProducer> GetAllProducers();
+
+        IProducerService ProducerService();
+
+        IMotorbikeService MotorbikeService();
+
 
     }
 }
