@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,22 +14,39 @@ using MotorBikeView.Services;
 
 namespace MotorBikeView.ViewModels
 {
-    internal class ProducerViewModel
+    internal class ProducerViewModel : ValidateBase
     {
         private IProducer _producer;
         private IDialogService _dialogService;
         private IBLC _blc;
         private string _guid;
-        public ProducerViewModel(IProducer producer, string guid,IBLC blc, IDialogService dialogService)
+
+        private string _name;
+        private string _country;
+
+        public ProducerViewModel(IProducer producer, string guid, IBLC blc, IDialogService dialogService)
         {
+            PropertyChanged += Producer_PropertyChanged;
+
             _guid = guid;
             _producer = producer;
             _dialogService = dialogService;
             _blc = blc;
             Initialize();
+
         }
 
-        public ICommand  SaveProducerCommand => new RelayCommand((x) => SaveProducer());
+        private void Producer_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Name) || e.PropertyName == nameof(Country))
+            {
+                OnPropertyChanged(nameof(SaveProducerCommand));
+            }
+        }
+
+        public ICommand SaveProducerCommand => new RelayCommand((x) => SaveProducer(), () => CanSave());
+
+        private bool CanSave() => !HasErrors;
 
         private void SaveProducer()
         {
@@ -41,14 +60,34 @@ namespace MotorBikeView.ViewModels
 
         private void Initialize()
         {
-            if (_producer.Id == 0) return;
+            if (_producer.Id == 0)
+            {
+                OnPropertyChanged(nameof(Name));
+                OnPropertyChanged(nameof(Country));
+            };
 
             Name = _producer.Name;
             Country = _producer.Country;
         }
 
+        [Required(ErrorMessage = "Nazwa producenta jest wymagana")]
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                SetProperty(ref _name, value);
+            }
+        }
 
-        public string Name { get; set; }
-        public string Country { get; set; }
+        [Required(ErrorMessage = "Nazwa kraju jest wymagana")]
+        public string Country
+        {
+            get => _country;
+            set
+            {
+                SetProperty(ref _country, value);
+            }
+        }
     }
 }

@@ -6,6 +6,26 @@
         xmlns:local="clr-namespace:MotorBikeView.Views"
         mc:Ignorable="d"
         Title="MotorbikeView" Height="450" Width="800">
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip"
+                            Value="{Binding RelativeSource={x:Static RelativeSource.Self},
+                                    Path=(Validation.Errors).CurrentItem.ErrorContent}"></Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip"
+                            Value="{Binding RelativeSource={x:Static RelativeSource.Self},
+                                    Path=(Validation.Errors).CurrentItem.ErrorContent}"></Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
@@ -26,17 +46,23 @@
         </Grid.RowDefinitions>
 
         <Label Grid.Column="1" Grid.Row="1" Content="Nazwa motocykla" VerticalAlignment="Center" HorizontalAlignment="Center"></Label>
-        <TextBox Grid.Column="2" Grid.Row="1" Margin="10 5" Text="{Binding Name}" VerticalAlignment="Center"></TextBox>
+        <TextBox Grid.Column="2" Grid.Row="1" Margin="10 5"
+                 Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,ValidatesOnNotifyDataErrors=True}"
+                 VerticalAlignment="Center"></TextBox>
 
         <Label Grid.Column="1" Grid.Row="2" Content="Producent" VerticalAlignment="Center" HorizontalAlignment="Center"></Label>
         <ComboBox Grid.Column="2" Grid.Row="2" VerticalAlignment="Center" Margin="10 5"
-                  Text="Wybierz producenta" ItemsSource="{Binding Producers}" SelectedItem="{Binding SelectedProducer}"
+                  Text="Wybierz producenta" 
+                  ItemsSource="{Binding Producers}"
+                  SelectedItem="{Binding SelectedProducer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,ValidatesOnNotifyDataErrors=True}"
                   DisplayMemberPath="Name" SelectedValuePath="Name"
                       
         />
 
         <Label Grid.Column="1" Grid.Row="3" Content="Rok Produkcji" VerticalAlignment="Center" HorizontalAlignment="Center"></Label>
-        <TextBox Grid.Column="2" Grid.Row="3" Margin="10 5" Text="{Binding ProductionYear}" VerticalAlignment="Center"></TextBox>
+        <TextBox Grid.Column="2" Grid.Row="3" Margin="10 5" 
+                 Text="{Binding ProductionYear, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,ValidatesOnNotifyDataErrors=True}" 
+                 VerticalAlignment="Center"></TextBox>
 
 
         <Label Grid.Column="1" Grid.Row="4" Content="Typ skrzyni biegów" VerticalAlignment="Center" HorizontalAlignment="Center"></Label>

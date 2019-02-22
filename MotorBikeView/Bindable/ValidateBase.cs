@@ -10,21 +10,21 @@ namespace MotorBikeView.Bindable
 {
     internal class ValidateBase : BindableBase, INotifyDataErrorInfo
     {
-        private readonly Dictionary<string, List<string>> _errors;
+        private Dictionary<string, List<string>> _errors = new Dictionary<string, List<string>>();
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged = delegate { };
+
         public bool HasErrors => _errors.Count > 0;
 
-
-        public ValidateBase()
+        public IEnumerable GetErrors(string propertyName)
         {
-            _errors = new Dictionary<string, List<string>>();
+            if (!_errors.ContainsKey(propertyName))
+            {
+                return null;
+            }
 
+            return _errors[propertyName];
         }
-
-        public IEnumerable GetErrors(string propertyName) =>
-             !_errors.ContainsKey(propertyName) ? null : _errors[propertyName];
-
 
         protected override void SetProperty<T>(ref T member, T val,
             [CallerMemberName] string propertyName = null)
@@ -36,7 +36,8 @@ namespace MotorBikeView.Bindable
         private void ValidateProperty<T>(string propertyName, T newValue)
         {
             var result = new List<ValidationResult>();
-            var context = new ValidationContext(this) { MemberName = propertyName };
+            var context = new ValidationContext(this);
+            context.MemberName = propertyName;
 
             Validator.TryValidateProperty(newValue, context, result);
 
@@ -49,7 +50,7 @@ namespace MotorBikeView.Bindable
                 _errors.Remove(propertyName);
             }
 
-            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+            ErrorsChanged(this, new DataErrorsChangedEventArgs(propertyName));
         }
 
     }

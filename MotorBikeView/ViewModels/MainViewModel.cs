@@ -25,7 +25,6 @@ namespace MotorBikeView.ViewModels
         private TransmissionType _selectedTransmission;
         private string _nameMotorBike;
 
-
         public MainViewModel()
         {
             LoadBLC();
@@ -39,10 +38,22 @@ namespace MotorBikeView.ViewModels
             SelectedTransmission = TransmissionType.All;
         }
 
+        private void LoadCollection()
+        {
+            Producers = new ObservableCollection<IProducer>(_blc.GetProducers());
+            Motorbikes = new ObservableCollection<IMotorbike>(_blc.GetMotorbike());
+        }
+
+        private void LoadBLC()
+        {
+            Properties.Settings sett = new Properties.Settings();
+            var nameDLL = sett.DBNameConf;
+            _blc = new BLC.BLC(nameDLL);
+        }
+
         public RelayCommand AddProducerCommand => new RelayCommand((x) => OpenDialog(WindowType.ProducerWindow, _blc.CreateEmptyProducer()));
         public RelayCommand DeleteProducerCommand => new RelayCommand((x) => DeleteProcuder(), () => CanChangeProducer);
         public RelayCommand UpdateProducerCommand => new RelayCommand((x) => OpenDialog(WindowType.ProducerWindow, _selectedProducer, true), () => CanChangeProducer);
-
 
         private bool CanChangeProducer => _selectedProducer != null && _selectedProducer.Id != -1;
         private void DeleteProcuder()
@@ -58,7 +69,6 @@ namespace MotorBikeView.ViewModels
             _blc.ProducerService().DeleteProducer(SelectedProducer);
             _producers.Remove(_selectedProducer);
         }
-
 
         public RelayCommand AddMotorbikeCommand => new RelayCommand((x) => OpenDialog(WindowType.MotorbikeWindow, _blc.CreateEmptyMotorBike()));
         public RelayCommand DeleteMotorbikeCommand => new RelayCommand((x) => DeleteMotorbike(), () => _selectedMotorbike != null);
@@ -105,16 +115,12 @@ namespace MotorBikeView.ViewModels
             set
             {
                 _selectedProducer = value;
+                MotorbikeFilterProducer();
                 OnPropertyChanged(nameof(DeleteProducerCommand));
                 OnPropertyChanged(nameof(UpdateProducerCommand));
                 OnPropertyChanged(nameof(SelectedProducer));
+                OnPropertyChanged(nameof(Motorbikes));
             }
-        }
-
-        private void MotorbikeFilterTransmission()
-        {
-            Motorbikes = new ObservableCollection<IMotorbike>(_blc.GetMotorbike().Where(x =>
-                SelectedTransmission == TransmissionType.All || x.Transmission == SelectedTransmission));
         }
 
         public IMotorbike SelectedMotorbike
@@ -153,13 +159,6 @@ namespace MotorBikeView.ViewModels
                 OnPropertyChanged(nameof(Motorbikes));
             }
         }
-
-        private void MotoribikeFilterName()
-        {
-            Motorbikes = new ObservableCollection<IMotorbike>(_blc.GetMotorbike().Where(x =>
-                NameMotorBike.Length == 0 || x.Name.ToLower().StartsWith(NameMotorBike.ToLower())));
-        }
-
 
         private void OpenDialog(WindowType windowType, IEntity entity, bool isEditEntity = false)
         {
@@ -204,8 +203,8 @@ namespace MotorBikeView.ViewModels
             if (type.Contains(typeof(IProducer)))
             {
                 _blc.ProducerService().UpdateProducer((IProducer)entity);
-                SelectedProducer = null;
                 LoadCollection();
+                SelectedProducer = null;
             }
             else if (type.Contains(typeof(IMotorbike)))
             {
@@ -214,19 +213,26 @@ namespace MotorBikeView.ViewModels
             }
         }
 
-
-        private void LoadCollection()
+        private void MotorbikeFilterTransmission()
         {
-            Producers = new ObservableCollection<IProducer>(_blc.GetProducers());
-            Motorbikes = new ObservableCollection<IMotorbike>(_blc.GetMotorbike());
+            Motorbikes = new ObservableCollection<IMotorbike>(_blc.GetMotorbike().Where(x =>
+                SelectedTransmission == TransmissionType.All || x.Transmission == SelectedTransmission));
         }
 
-        private void LoadBLC()
+        private void MotoribikeFilterName()
         {
-            Properties.Settings sett = new Properties.Settings();
-            var nameDLL = sett.DBNameConf;
-            _blc = new BLC.BLC(nameDLL);
+            Motorbikes = new ObservableCollection<IMotorbike>(_blc.GetMotorbike().Where(x =>
+                NameMotorBike.Length == 0 || x.Name.ToLower().StartsWith(NameMotorBike.ToLower())));
         }
+
+        private void MotorbikeFilterProducer()
+        {
+            Motorbikes = new ObservableCollection<IMotorbike>(_blc.GetMotorbike().Where(x =>
+               SelectedProducer.Id == -1 || x.Producer.Id == SelectedProducer.Id));
+        }
+
+
+
 
 
     }
